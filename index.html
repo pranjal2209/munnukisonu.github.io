@@ -1,134 +1,302 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Will You Be My Valentine?</title>
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(135deg, #ffe4ec, #ffd6e0, #ffc1cc);
-      overflow: hidden;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    .card {
-      background: white;
-      padding: 50px;
-      border-radius: 25px;
-      text-align: center;
-      max-width: 500px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-      position: relative;
-    }
+<title>Will You Be My Valentine?</title>
 
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-    }
+<style>
 
-    p {
-      color: #555;
-      font-size: 1.1rem;
-    }
+body{
+margin:0;
+height:100vh;
+display:flex;
+align-items:center;
+justify-content:center;
+font-family:'Segoe UI',sans-serif;
+background:linear-gradient(135deg,#ffe4ec,#ffd6e0,#ffc1cc);
+overflow:hidden;
+}
 
-    .heart {
-      font-size: 60px;
-      animation: pulse 1.5s infinite;
-    }
+/* Falling Hearts */
+.heart-bg{
+position:fixed;
+top:0;
+left:0;
+font-size:20px;
+animation:fall linear forwards;
+pointer-events:none;
+}
 
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.2); }
-      100% { transform: scale(1); }
-    }
+@keyframes fall{
+0%{transform:translateY(-10vh);}
+100%{transform:translateY(110vh);}
+}
 
-    .buttons {
-      margin-top: 30px;
-      display: flex;
-      gap: 20px;
-      justify-content: center;
-      position: relative;
-    }
+.card{
+background:white;
+padding:50px;
+border-radius:25px;
+text-align:center;
+max-width:520px;
+box-shadow:0 20px 40px rgba(0,0,0,0.15);
+position:relative;
+z-index:2;
+}
 
-    button {
-      padding: 15px 30px;
-      font-size: 1.1rem;
-      border-radius: 12px;
-      border: none;
-      cursor: pointer;
-      transition: 0.2s;
-    }
+h1{
+font-size:2.5rem;
+margin-bottom:10px;
+}
 
-    #yesBtn {
-      background: #ff4d6d;
-      color: white;
-    }
+p{
+color:#555;
+font-size:1.1rem;
+}
 
-    #yesBtn:hover {
-      transform: scale(1.1);
-    }
+.heart{
+font-size:60px;
+animation:pulse 1.5s infinite;
+}
 
-    #noBtn {
-      background: white;
-      border: 2px solid #ddd;
-      position: relative;
-    }
+@keyframes pulse{
+0%{transform:scale(1);}
+50%{transform:scale(1.2);}
+100%{transform:scale(1);}
+}
 
-    #success {
-      display: none;
-    }
+.buttons{
+margin-top:30px;
+display:flex;
+gap:20px;
+justify-content:center;
+position:relative;
+}
 
-  </style>
+button{
+padding:15px 30px;
+font-size:1.1rem;
+border-radius:12px;
+border:none;
+cursor:pointer;
+transition:0.25s;
+}
+
+#yesBtn{
+background:#ff4d6d;
+color:white;
+}
+
+#yesBtn:hover{
+transform:scale(1.15);
+}
+
+#noBtn{
+background:white;
+border:2px solid #ddd;
+}
+
+#success{
+display:none;
+}
+
+/* Confetti */
+#confetti{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+pointer-events:none;
+z-index:1;
+}
+
+</style>
+
 </head>
+
 <body>
 
-<div class="card" id="proposal">
-  <div class="heart">❤️</div>
-  <h1>Will You Be My Valentine?</h1>
-  <p>
-    From the moment you came into my life, everything became brighter, warmer,
-    and filled with love. I can't imagine my days without you.
-    <br><br>
-    So here's a little question straight from my heart...
-  </p>
+<canvas id="confetti"></canvas>
 
-  <div class="buttons">
-    <button id="yesBtn">Yes 💖</button>
-    <button id="noBtn">No 😢</button>
-  </div>
+<div class="card" id="proposal">
+<div class="heart">❤️</div>
+
+<h1>Will You Be My Valentine?</h1>
+
+<p>
+From the moment you came into my life, everything became brighter,
+warmer, and filled with love.  
+I can't imagine my days without you.
+<br><br>
+So here's a little question straight from my heart...
+</p>
+
+<div class="buttons">
+<button id="yesBtn">Yes 💖</button>
+<button id="noBtn">No 😢</button>
+</div>
 </div>
 
 <div class="card" id="success">
-  <div class="heart">💘</div>
-  <h1>YAY!!! 💕</h1>
-  <p>
-    You just made me the happiest person alive. I promise to keep loving you,
-    supporting you, and making countless beautiful memories together.
-  </p>
-  <p>Our love story continues... ❤️</p>
+<div class="heart">💘</div>
+
+<h1>YAY!!! 💕</h1>
+
+<p>
+You just made me the happiest person alive.  
+I promise to keep loving you, supporting you,
+and making countless beautiful memories together.
+</p>
+
+<p>Our love story continues... ❤️</p>
 </div>
 
+<!-- Music -->
+
+<audio id="music" loop>
+<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8a2b6c13a.mp3?filename=romantic-love-11786.mp3" type="audio/mp3">
+</audio>
+
 <script>
-  const yesBtn = document.getElementById('yesBtn');
-  const noBtn = document.getElementById('noBtn');
-  const proposal = document.getElementById('proposal');
-  const success = document.getElementById('success');
 
-  yesBtn.addEventListener('click', () => {
-    proposal.style.display = 'none';
-    success.style.display = 'block';
-  });
+const yesBtn=document.getElementById('yesBtn');
+const noBtn=document.getElementById('noBtn');
+const proposal=document.getElementById('proposal');
+const success=document.getElementById('success');
+const music=document.getElementById('music');
 
-  noBtn.addEventListener('mouseover', () => {
-    const x = Math.floor(Math.random() * 300) - 150;
-    const y = Math.floor(Math.random() * 300) - 150;
-    noBtn.style.transform = `translate(${x}px, ${y}px)`;
-  });
+////////////////////////////
+// Falling Hearts
+////////////////////////////
+
+setInterval(()=>{
+const heart=document.createElement("div");
+heart.classList.add("heart-bg");
+heart.innerHTML="💖";
+
+heart.style.left=Math.random()*100+"vw";
+heart.style.animationDuration=(Math.random()*3+4)+"s";
+
+document.body.appendChild(heart);
+
+setTimeout(()=>heart.remove(),7000);
+
+},300);
+
+////////////////////////////
+// Confetti
+////////////////////////////
+
+const canvas=document.getElementById('confetti');
+const ctx=canvas.getContext('2d');
+
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let pieces=[];
+
+function createConfetti(){
+for(let i=0;i<180;i++){
+pieces.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height-canvas.height,
+size:Math.random()*10+3,
+speed:Math.random()*3+2,
+angle:Math.random()*360
+});
+}
+}
+
+function drawConfetti(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+
+pieces.forEach(p=>{
+ctx.beginPath();
+ctx.rect(p.x,p.y,p.size,p.size);
+ctx.fillStyle=`hsl(${Math.random()*360},100%,50%)`;
+ctx.fill();
+
+p.y+=p.speed;
+p.x+=Math.sin(p.angle);
+
+if(p.y>canvas.height){
+p.y=-10;
+}
+});
+
+requestAnimationFrame(drawConfetti);
+}
+
+////////////////////////////
+// YES CLICK
+////////////////////////////
+
+yesBtn.addEventListener('click',()=>{
+
+proposal.style.display='none';
+success.style.display='block';
+
+music.play();
+
+createConfetti();
+drawConfetti();
+
+});
+
+////////////////////////////
+// NO BUTTON MAGIC 😄
+////////////////////////////
+
+const messages=[
+"Please don't click No 😢",
+"Are you sure? 🥺",
+"Think again ❤️",
+"I'll cook for you forever 🍝",
+"You are my favorite person 💕",
+"My heart will cry 💔",
+"I'll binge-watch anything with you 😄",
+"Life is better with you ✨",
+"Give love a chance 😭",
+"You're too special to lose 💘",
+"Say YES instead 😍",
+"Don't run from destiny 😉"
+];
+
+let msgIndex=0;
+let yesScale=1;
+let noScale=1;
+
+noBtn.addEventListener('mouseover',()=>{
+
+// Change text
+noBtn.innerText=messages[msgIndex % messages.length];
+msgIndex++;
+
+// Move button
+const x=Math.random()*300-150;
+const y=Math.random()*300-150;
+
+noBtn.style.position="relative";
+noBtn.style.transform=`translate(${x}px,${y}px) scale(${noScale})`;
+
+// Grow YES
+yesScale+=0.05;
+yesBtn.style.transform=`scale(${yesScale})`;
+
+// Shrink NO
+noScale-=0.04;
+if(noScale<0.4) noScale=0.4;
+
+});
+
+window.addEventListener('resize',()=>{
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+});
+
 </script>
 
 </body>
